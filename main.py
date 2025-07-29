@@ -4,6 +4,8 @@ os.environ["SDL_AUDIODRIVER"] = "dummy"
 import pygame
 from constants import *
 from player import *
+from asteroidfield import AsteroidField
+from asteroid import Asteroid
 
 def main():
 	pygame.init()
@@ -11,16 +13,31 @@ def main():
 	running = True
 	clock = pygame.time.Clock()
 	dt = 0
+
+	updatable = pygame.sprite.Group()
+	drawable = pygame.sprite.Group()
+
+	asteroids = pygame.sprite.Group()
+ 
+	Player.containers = updatable, drawable
 	player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+
+	Asteroid.containers = updatable, drawable, asteroids
+	AsteroidField.containers = updatable
+	asteroidfield = AsteroidField()
 	while running:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				running = False
-		screen.fill((0, 0, 0))
-		player.draw(screen)
-		pygame.display.flip()
+
 		dt = clock.tick(60)/1000
-		player.update(dt)
+		updatable.update(dt)
+  
+		screen.fill((0, 0, 0))
+		for drawable_obj in drawable:
+			drawable_obj.draw(screen)
+		pygame.display.flip()
+
 	pygame.quit()
 if __name__ == "__main__":
 	main()
