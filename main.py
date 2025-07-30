@@ -15,6 +15,8 @@ def main():
 	clock = pygame.time.Clock()
 	dt = 0
 
+	font = pygame.font.Font(None, 36)
+
 	updatable = pygame.sprite.Group()
 	drawable = pygame.sprite.Group()
 
@@ -38,6 +40,12 @@ def main():
 		updatable.update(dt)
   
 		screen.fill((0, 0, 0))
+
+		elapsed_time = pygame.time.get_ticks()
+		timer_surface = font.render(f"Time: {elapsed_time}ms", True, (255, 255, 255))
+		x = SCREEN_WIDTH - timer_surface.get_width() - 10
+		screen.blit(timer_surface, (x, 10))
+
 		for drawable_obj in drawable:
 			drawable_obj.draw(screen)
 		pygame.display.flip()
